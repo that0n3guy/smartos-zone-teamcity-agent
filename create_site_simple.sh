@@ -58,7 +58,11 @@ SITE_DIR=`echo $DOMAIN | $SED 's/\./_/g'`
 
 # Now we need to copy the virtual host template
 CONFIG=$NGINX_CONFIG/$DOMAIN
-#sudo cp $CURRENT_DIR/virtual_host.template $CONFIG
+
+wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/virtual_host.template
+cp virtual_host.template $CONFIG
+rm virtual_host.template
+
 sudo $SED -i "s/DOMAIN/$DOMAIN/g" $CONFIG
 sudo $SED -i "s!ROOT!$WEB_DIR/$SITE_DIR!g" $CONFIG
 
