@@ -5,12 +5,18 @@ if [ -z $1 ]; then
   exit 1
 fi
 
+if [ -z $3 ]; then
+  echo "No git branch (name) given"
+  exit 1
+fi
+
+
 # don't change these, they are used in the nginx.conf file.
 NGINX_DIR='/opt/local/etc/nginx/' # @todo simplify these variables
 NGINX_CONFIG='/opt/local/etc/nginx/sites-available'
 NGINX_SITES_ENABLED='/opt/local/etc/nginx/sites-enabled'
 NGINX_EXTRA_CONFIG='/opt/local/etc/nginx/conf.d' #not really used yet
-WEB_DIR="/home/admin/BuildAgent/work/www/$1"
+WEB_DIR="/home/admin/BuildAgent/work/www/$1/$3"
 
 SED=`which sed`
 
@@ -64,11 +70,11 @@ cp virtual_host.template $CONFIG
 rm virtual_host.template
 
 sudo $SED -i "s/DOMAIN/$DOMAIN/g" $CONFIG
-sudo $SED -i "s!ROOT!$WEB_DIR/$SITE_DIR!g" $CONFIG
+sudo $SED -i "s!ROOT!$WEB_DIR!g" $CONFIG
 
 # set up web root
-sudo mkdir $WEB_DIR/$SITE_DIR
-sudo chown nginx:nginx -R $WEB_DIR/$SITE_DIR
+#sudo mkdir $WEB_DIR/$SITE_DIR
+sudo chown nginx:nginx -R $WEB_DIR
 sudo chmod 600 $CONFIG
 
 # create symlink to enable site
