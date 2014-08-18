@@ -1,4 +1,4 @@
-user www;
+user   www  www;
 worker_processes auto;
 pid /var/db/nginx/nginx.pid;
 
@@ -69,7 +69,7 @@ http {
   ##
 
   include /opt/local/etc/nginx/conf.d/*.conf;
-  include /opt/local/etc/nginx/sites-enabled*;
+  include /opt/local/etc/nginx/sites-enabled/*;
 }
 
 
