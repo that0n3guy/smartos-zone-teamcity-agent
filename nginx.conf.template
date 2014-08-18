@@ -1,6 +1,6 @@
 user   www  www;
 worker_processes auto;
-pid /var/db/nginx/nginx.pid;
+#pid /var/db/nginx/nginx.pid;
 
 events {
   worker_connections 768;
