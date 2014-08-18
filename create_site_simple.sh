@@ -36,12 +36,12 @@ fi
 mv $NGINX_DIR/nginx.conf $NGINX_DIR/NGINX_MAIN_FILE
 
 wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/nginx.conf.template
-mv nginx.conf.template NGINX_DIR/nginx.conf
+mv nginx.conf.template $NGINX_DIR/nginx.conf
 rm nginx.conf.template
 
-mkdir -p NGINX_CONFIG
-mkdir -p NGINX_SITES_ENABLED
-mkdir -p NGINX_EXTRA_CONFIG
+mkdir -p $NGINX_CONFIG
+mkdir -p $NGINX_SITES_ENABLED
+mkdir -p $NGINX_EXTRA_CONFIG
 
 # check the domain is roughly valid!
 PATTERN="^([[:alnum:]]([[:alnum:]\-]{0,61}[[:alnum:]])?\.)+[[:alpha:]]{2,6}$"
@@ -72,7 +72,7 @@ sudo chown nginx:nginx -R $WEB_DIR/$SITE_DIR
 sudo chmod 600 $CONFIG
 
 # create symlink to enable site
-sudo ln -s $CONFIG $NGINX_SITES_ENABLED/$DOMAIN.conf
+sudo ln -s $CONFIG $NGINX_SITES_ENABLED/$DOMAIN
 
 # reload Nginx to pull in new config
 nginx -s reload
