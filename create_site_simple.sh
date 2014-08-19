@@ -26,6 +26,7 @@ DOMAIN=$2
 if [ -f "$NGINX_DIR/nginx.conf.backup" ];
 then
    # do nothing because.  There is already a backup of the original"
+   echo 'Backup nginx.conf exists, not backup necessary.  Moving on.'
 else
   mv $NGINX_DIR/nginx.conf $NGINX_DIR/nginx.conf.backup
 fi
