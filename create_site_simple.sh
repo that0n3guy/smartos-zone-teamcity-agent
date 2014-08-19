@@ -12,7 +12,7 @@ shift $((OPTIND -1)) #is this needed?
 
 
 if [ -z $WEB_DIR ]; then
-  echo "No webdir path given"
+  echo "[error] No webdir path given"
   exit 1
 else 
   echo "[info] webdir given: $WEB_DIR"
@@ -29,7 +29,7 @@ SED=`which sed`
 #CURRENT_DIR=`dirname $0`
 
 if [ -z $DOMAIN ]; then
-  echo "No domain name given"
+  echo "[error] No domain name given"
   exit 1
 else 
   echo "[info] Domain given: $DOMAIN"
@@ -54,9 +54,9 @@ mkdir -p $NGINX_EXTRA_CONFIG
 PATTERN="^([[:alnum:]]([[:alnum:]\-]{0,61}[[:alnum:]])?\.)+[[:alpha:]]{2,6}$"
 if [[ "$DOMAIN" =~ $PATTERN ]]; then
 	DOMAIN=`echo $DOMAIN | tr '[A-Z]' '[a-z]'`
-	echo "Creating hosting for:" $DOMAIN
+	echo "[info] Creating hosting for:" $DOMAIN
 else
-	echo "invalid domain name"
+	echo "[error] invalid domain name"
 	exit 1 
 fi
 
@@ -74,6 +74,7 @@ for val in "${PARAMS[@]}"; do
   COUTER=1
   IFS='=' read -ra PARAM <<< "$val"
   PARAM_STRING="$PARAM_STRING\n        fastcgi_param ${PARAM[0]} '${PARAM[1]}';"
+  echo "[info] Adding fastcgi_param ${PARAM[0]} '${PARAM[1]}'; to virtual host."
 done
 
 sudo $SED -i "s/PARAMSHERE/$PARAM_STRING/g" $CONFIG
