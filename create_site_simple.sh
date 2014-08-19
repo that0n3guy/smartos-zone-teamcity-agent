@@ -1,45 +1,34 @@
 #!/bin/bash
 
 if [ -z $1 ]; then
-  echo "No teamcity project id (name) given"
+  echo "No webdir path given"
   exit 1
 fi
-
-if [ -z $3 ]; then
-  echo "No git branch (name) given"
-  exit 1
-fi
-
 
 # don't change these, they are used in the nginx.conf file.
 NGINX_DIR='/opt/local/etc/nginx/' # @todo simplify these variables
 NGINX_CONFIG='/opt/local/etc/nginx/sites-available'
 NGINX_SITES_ENABLED='/opt/local/etc/nginx/sites-enabled'
 NGINX_EXTRA_CONFIG='/opt/local/etc/nginx/conf.d' #not really used yet
-WEB_DIR="/home/admin/BuildAgent/work/www/$1/$3"
+WEB_DIR="/home/admin/BuildAgent/work/$1"
 
 SED=`which sed`
 
 #CURRENT_DIR=`dirname $0`
-
-
-DOMAIN=$2
 
 if [ -z $2 ]; then
   echo "No domain name given"
   exit 1
 fi
  
-#backup previous nginx config file
-NGINX_MAIN_FILE='nginx.conf' 
-if [[ -e $NGINX_MAIN_FILE.ext ]] ; then
-    i=0
-    while [[ -e $NGINX_MAIN_FILE-$i.ext ]] ; do
-        let i++
-    done
-    NGINX_MAIN_FILE=$NGINX_MAIN_FILE-$i
+DOMAIN=$2
+
+if [ -f "$NGINX_DIR/nginx.conf.backup" ];
+then
+   # do nothing because.  There is already a backup of the original"
+else
+  mv $NGINX_DIR/nginx.conf $NGINX_DIR/nginx.conf.backup
 fi
-mv $NGINX_DIR/nginx.conf $NGINX_DIR/NGINX_MAIN_FILE
 
 wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/nginx.conf.template
 mv nginx.conf.template $NGINX_DIR/nginx.conf
@@ -91,3 +80,6 @@ nginx -s reload
 ln -s $NGINX_CONFIG/$DOMAIN $NGINX_SITES_ENABLED/$DOMAIN
 
 echo "Site Created for $DOMAIN"
+
+#remove this script
+rm create_site_simple.sh
