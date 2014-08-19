@@ -75,14 +75,14 @@ for val in "${PARAMS[@]}"; do
   IFS='=' read -ra PARAM <<< "$val"
   for i in "${PARAM[@]}"; do
       # process "$i"
-      if [[ $COUNTER -eq 1 ]; then
-          KEY="$i"
+      if (( $COUNTER < 2 )); then
+          PARAMKEY="$i"
       else
-          VALUE="$i"
+          PARAMVALUE="$i"
       fi
       COUNTER=$(($COUNTER + 1))
   done
-  PARAM_STRING="$PARAM_STRING\n    fastcgi_param $KEY '$VALUE';"
+  PARAM_STRING="$PARAM_STRING\n    fastcgi_param $PARAMKEY '$PARAMVALUE';"
 done
 
 sudo $SED -i "s/PARAMSHERE/$PARAM_STRING/g" $CONFIG
