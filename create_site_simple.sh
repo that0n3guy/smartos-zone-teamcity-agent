@@ -70,24 +70,20 @@ wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zon
 mv virtual_host.template $CONFIG
 
 PARAM_STRING="    ";
-if [ -z $PARAMS ]; then
-  for val in "${PARAMS[@]}"; do
-
+for val in "${PARAMS[@]}"; do
   COUTER=1
   IFS='=' read -ra PARAM <<< "$val"
   for i in "${PARAM[@]}"; do
       # process "$i"
-      if[ $COUNTER -eq 1]; then
-          KEY=$i
+      if [[ $COUNTER -eq 1 ]; then
+          KEY="$i"
       else
-          VAL=$i
+          VALUE="$i"
       fi
-      $COUNTER=$(($COUNTER + 1))
+      COUNTER=$(($COUNTER + 1))
   done
-
-      $PARAM_STRING = "$PARAM_STRING\n    fastcgi_param $key '$val';"
-  done
-fi
+  PARAM_STRING="$PARAM_STRING\n    fastcgi_param $KEY '$VALUE';"
+done
 
 sudo $SED -i "s/PARAMSHERE/$PARAM_STRING/g" $CONFIG
 sudo $SED -i "s/DOMAIN/$DOMAIN/g" $CONFIG
