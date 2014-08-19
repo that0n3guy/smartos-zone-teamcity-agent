@@ -5,7 +5,6 @@ if [ -z $1 ]; then
   exit 1
 else 
   echo "[info] webdir given: $1"
-
 fi
 
 # don't change these, they are used in the nginx.conf file.
@@ -13,7 +12,7 @@ NGINX_DIR='/opt/local/etc/nginx/' # @todo simplify these variables
 NGINX_CONFIG='/opt/local/etc/nginx/sites-available'
 NGINX_SITES_ENABLED='/opt/local/etc/nginx/sites-enabled'
 NGINX_EXTRA_CONFIG='/opt/local/etc/nginx/conf.d' #not really used yet
-WEB_DIR="/home/admin/BuildAgent/work/$1"
+WEB_DIR="$1"
 
 SED=`which sed`
 
@@ -38,7 +37,6 @@ fi
 
 wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/nginx.conf.template
 mv nginx.conf.template $NGINX_DIR/nginx.conf
-rm nginx.conf.template
 
 mkdir -p $NGINX_CONFIG
 mkdir -p $NGINX_SITES_ENABLED
@@ -61,8 +59,7 @@ SITE_DIR=`echo $DOMAIN | $SED 's/\./_/g'`
 CONFIG=$NGINX_CONFIG/$DOMAIN
 
 wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/virtual_host.template
-cp virtual_host.template $CONFIG
-rm virtual_host.template
+mv virtual_host.template $CONFIG
 
 sudo $SED -i "s/DOMAIN/$DOMAIN/g" $CONFIG
 sudo $SED -i "s!ROOT!$WEB_DIR!g" $CONFIG
@@ -73,17 +70,15 @@ sudo chown www:www -R $WEB_DIR
 sudo chmod 600 $CONFIG
 
 # create symlink to enable site
+if [ -f "$NGINX_SITES_ENABLED/$DOMAIN" ];
+then
+   # if it exists, remove it to make sure it points to the right place
+   rm $NGINX_SITES_ENABLED/$DOMAIN
+fi
 sudo ln -s $CONFIG $NGINX_SITES_ENABLED/$DOMAIN
 
 # reload Nginx to pull in new config
 nginx -s reload
-
-# put the template index.html file into the new domains web dir
-#sudo cp $CURRENT_DIR/index.html.template $WEB_DIR/$SITE_DIR/index.html
-#sudo $SED -i "s/SITE/$DOMAIN/g" $WEB_DIR/$SITE_DIR/index.html
-#sudo chown nginx:nginx $WEB_DIR/$SITE_DIR/index.html
-
-ln -s $NGINX_CONFIG/$DOMAIN $NGINX_SITES_ENABLED/$DOMAIN
 
 echo "Site Created for $DOMAIN"
 
