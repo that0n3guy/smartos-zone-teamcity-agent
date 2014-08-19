@@ -79,7 +79,7 @@ echo "Or:"
 PARAM_STRING = "    ";
 if [ -z $PARAMS ]; then
   for val in "${PARAMS[@]}"; do
-      $PARAM_STRING = "PARAM_STRING\n    fastcgi_param $val"
+      $PARAM_STRING = "PARAM_STRING\n    fastcgi_param $val;"
   done
 fi
 
