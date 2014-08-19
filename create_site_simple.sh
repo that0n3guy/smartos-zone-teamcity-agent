@@ -82,7 +82,4 @@ nginx -s reload
 
 echo "Site Created for $DOMAIN"
 
-#remove this script
-rm create_site_simple.sh
-
 exit 0
