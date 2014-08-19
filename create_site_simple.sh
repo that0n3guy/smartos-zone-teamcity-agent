@@ -38,7 +38,7 @@ fi
 if [ -f "$NGINX_DIR/nginx.conf.backup" ];
 then
    # do nothing because.  There is already a backup of the original"
-   echo 'Backup nginx.conf exists, not backup necessary.  Moving on.'
+   echo '[info] Backup nginx.conf exists, not backup necessary.  Moving on.'
 else
   mv $NGINX_DIR/nginx.conf $NGINX_DIR/nginx.conf.backup
 fi
@@ -97,6 +97,6 @@ sudo ln -s $CONFIG $NGINX_SITES_ENABLED/$DOMAIN
 # reload Nginx to pull in new config
 nginx -s reload
 
-echo "Site Created for $DOMAIN"
+echo "[info] Site Created for $DOMAIN"
 
 exit 0
