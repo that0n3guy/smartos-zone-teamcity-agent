@@ -1,6 +1,17 @@
 #!/bin/bash
 
-if [ -z $1 ]; then
+# get all the options
+while getopts ":d:w:p:" opt; do
+    case $opt in
+        d) DOMAIN=$OPTARG;;
+        w) WEB_DIR=("$OPTARG");;
+        p) PARAMS+=("$OPTARG");;
+    esac
+done
+shift $((OPTIND -1)) #is this needed?
+
+
+if [ -z $WEB_DIR ]; then
   echo "No webdir path given"
   exit 1
 else 
@@ -12,20 +23,17 @@ NGINX_DIR='/opt/local/etc/nginx/' # @todo simplify these variables
 NGINX_CONFIG='/opt/local/etc/nginx/sites-available'
 NGINX_SITES_ENABLED='/opt/local/etc/nginx/sites-enabled'
 NGINX_EXTRA_CONFIG='/opt/local/etc/nginx/conf.d' #not really used yet
-WEB_DIR="$1"
 
 SED=`which sed`
 
 #CURRENT_DIR=`dirname $0`
 
-if [ -z $2 ]; then
+if [ -z $DOMAIN ]; then
   echo "No domain name given"
   exit 1
 else 
   echo "[info] Domain given: $2"
 fi
- 
-DOMAIN=$2
 
 if [ -f "$NGINX_DIR/nginx.conf.backup" ];
 then
@@ -61,6 +69,21 @@ CONFIG=$NGINX_CONFIG/$DOMAIN
 wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/virtual_host.template
 mv virtual_host.template $CONFIG
 
+
+
+echo "The first value of the array 'multi' is '$multi'"
+echo "The whole list of values is '${multi[@]}'"
+
+echo "Or:"
+
+PARAM_STRING = "    ";
+if [ -z $PARAMS ]; then
+  for val in "${PARAMS[@]}"; do
+      $PARAM_STRING = "PARAM_STRING\n    fastcgi_param $val"
+  done
+fi
+
+sudo $SED -i "s/PARAMSHERE/$PARAM_STRING/g" $CONFIG
 sudo $SED -i "s/DOMAIN/$DOMAIN/g" $CONFIG
 sudo $SED -i "s!ROOT!$WEB_DIR!g" $CONFIG
 
