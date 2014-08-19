@@ -10,6 +10,14 @@ bash create_site_simple.sh path/to/web/root www.domainhere.com
 rm create_site_simple.sh
 ```
 
+I run mine like so:
+```
+wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/create_site_simple.sh
+bash create_site_simple.sh %teamcity.build.checkoutDir% testing.example.com
+rm create_site_simple.sh
+```
+
+
 The `path/to/web/root` is where you want the nginx virtual host file to point at.  This will setup the nginx virtual host file and set the permissions withing the web root.
 
 ### Fix java's ssl issue 
