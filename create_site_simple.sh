@@ -69,20 +69,11 @@ CONFIG=$NGINX_CONFIG/$DOMAIN
 wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/virtual_host.template
 mv virtual_host.template $CONFIG
 
-PARAM_STRING="    ";
+PARAM_STRING="        ";
 for val in "${PARAMS[@]}"; do
   COUTER=1
   IFS='=' read -ra PARAM <<< "$val"
-  for i in "${PARAM[@]}"; do
-      # process "$i"
-      if (( $COUNTER < 2 )); then
-          PARAMKEY="$i"
-      else
-          PARAMVALUE="$i"
-      fi
-      COUNTER=$(($COUNTER + 1))
-  done
-  PARAM_STRING="$PARAM_STRING\n    fastcgi_param $PARAMKEY '$PARAMVALUE';"
+  PARAM_STRING="$PARAM_STRING\n        fastcgi_param ${PARAM[0]} '${PARAM[1]}';"
 done
 
 sudo $SED -i "s/PARAMSHERE/$PARAM_STRING/g" $CONFIG
