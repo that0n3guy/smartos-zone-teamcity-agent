@@ -4,7 +4,7 @@ This repo contains several scripts to help with running a PHP webserver and Team
 ### Setup an nginx virtual host each time you run a build:
 
 * `-d` is for domain
-* `-w` is for web directory (ie web root)
+* `-w` is for web directory (ie web root), the full path.
 * `-p` is for fastcgi_param paramaters (you can set environment variables with this).  You can add more than one as well.  See my second example below.  Don't use spacing or funky characters.
 
 
