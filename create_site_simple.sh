@@ -15,7 +15,7 @@ if [ -z $WEB_DIR ]; then
   echo "No webdir path given"
   exit 1
 else 
-  echo "[info] webdir given: $1"
+  echo "[info] webdir given: $WEB_DIR"
 fi
 
 # don't change these, they are used in the nginx.conf file.
@@ -32,7 +32,7 @@ if [ -z $DOMAIN ]; then
   echo "No domain name given"
   exit 1
 else 
-  echo "[info] Domain given: $2"
+  echo "[info] Domain given: $DOMAIN"
 fi
 
 if [ -f "$NGINX_DIR/nginx.conf.backup" ];
@@ -69,17 +69,23 @@ CONFIG=$NGINX_CONFIG/$DOMAIN
 wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/virtual_host.template
 mv virtual_host.template $CONFIG
 
-
-
-echo "The first value of the array 'multi' is '$multi'"
-echo "The whole list of values is '${multi[@]}'"
-
-echo "Or:"
-
-PARAM_STRING = "    ";
+PARAM_STRING="    ";
 if [ -z $PARAMS ]; then
   for val in "${PARAMS[@]}"; do
-      $PARAM_STRING = "PARAM_STRING\n    fastcgi_param $val;"
+
+  COUTER=1
+  IFS='=' read -ra PARAM <<< "$val"
+  for i in "${PARAM[@]}"; do
+      # process "$i"
+      if[ $COUNTER -eq 1]; then
+          KEY=$i
+      else
+          VAL=$i
+      fi
+      $COUNTER=$(($COUNTER + 1))
+  done
+
+      $PARAM_STRING = "$PARAM_STRING\n    fastcgi_param $key '$val';"
   done
 fi
 
