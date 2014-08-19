@@ -35,7 +35,7 @@ else
   mv $NGINX_DIR/nginx.conf $NGINX_DIR/nginx.conf.backup
 fi
 
-wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/nginx.conf.template
+wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/nginx.conf.template
 mv nginx.conf.template $NGINX_DIR/nginx.conf
 
 mkdir -p $NGINX_CONFIG
@@ -58,7 +58,7 @@ SITE_DIR=`echo $DOMAIN | $SED 's/\./_/g'`
 # Now we need to copy the virtual host template
 CONFIG=$NGINX_CONFIG/$DOMAIN
 
-wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/virtual_host.template
+wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/virtual_host.template
 mv virtual_host.template $CONFIG
 
 sudo $SED -i "s/DOMAIN/$DOMAIN/g" $CONFIG

@@ -5,7 +5,7 @@ This repo contains several scripts to help with running a PHP webserver and Team
 Have teamcity run:
 
 ```
-wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/create_site_simple.sh
+wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-teamcity-agent/master/create_site_simple.sh
 bash create_site_simple.sh path/to/web/root www.domainhere.com
 rm create_site_simple.sh
 ```
