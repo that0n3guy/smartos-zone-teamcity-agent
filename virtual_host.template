@@ -7,7 +7,13 @@ server {
     index index.html index.htm index.php;
 
     charset utf-8;
+    
+    #access_log off;
+    access_log  /var/log/nginx/DOMAIN-access.log;
+    error_log  /var/log/nginx/DOMAIN-error.log error;
+    rewrite_log     on;
 
+    # Heres my redirect, try normal URI and then our Laravel urls.
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
@@ -15,17 +21,23 @@ server {
     location = /favicon.ico { access_log off; log_not_found off; }
     location = /robots.txt  { access_log off; log_not_found off; }
 
-    access_log off;
-    error_log  /var/log/nginx/DOMAIN-error.log error;
+    location ~* ^.+.(css|js|jpeg|jpg|gif|png|ico|xml) {
+        access_log off;
+        expires 3h;
+    }
 
     error_page 404 /index.php;
 
-    location ~ \.php$ {
-        fastcgi_param ocaservertype "test";
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php5-fpm.sock;
-        fastcgi_index index.php;
-        include fastcgi_params;
+    location ~* \.php$ {
+        # Server PHP config.
+        #fastcgi_pass                    unix:/var/run/php5-fpm.sock;
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index                   index.php;
+        fastcgi_split_path_info         ^(.+\.php)(.*)$;
+
+        # Typical vars in here, nothing interesting.
+        include                         /opt/local/etc/nginx/fastcgi_params;
+        fastcgi_param                   SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
     location ~ /\.ht {
