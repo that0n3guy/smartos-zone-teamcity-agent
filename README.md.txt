@@ -10,7 +10,7 @@ bash create_site_simple.sh path/to/web/root www.domainhere.com
 rm create_site_simple.sh
 ```
 
-The `path/to/web/root` is where you want the nginx virtual host file to point at.  This will setup the nginx virtual host file.
+The `path/to/web/root` is where you want the nginx virtual host file to point at.  This will setup the nginx virtual host file and set the permissions withing the web root.
 
 ### Fix java's ssl issue 
 This is swiped from: https://www.ailis.de/~k/uploads/scripts/import-startssl
