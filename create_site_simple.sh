@@ -3,6 +3,9 @@
 if [ -z $1 ]; then
   echo "No webdir path given"
   exit 1
+else 
+  echo "[info] webdir given: $1"
+
 fi
 
 # don't change these, they are used in the nginx.conf file.
@@ -19,6 +22,8 @@ SED=`which sed`
 if [ -z $2 ]; then
   echo "No domain name given"
   exit 1
+else 
+  echo "[info] Domain given: $2"
 fi
  
 DOMAIN=$2
@@ -31,7 +36,7 @@ else
   mv $NGINX_DIR/nginx.conf $NGINX_DIR/nginx.conf.backup
 fi
 
-wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/nginx.conf.template
+wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/nginx.conf.template
 mv nginx.conf.template $NGINX_DIR/nginx.conf
 rm nginx.conf.template
 
@@ -55,7 +60,7 @@ SITE_DIR=`echo $DOMAIN | $SED 's/\./_/g'`
 # Now we need to copy the virtual host template
 CONFIG=$NGINX_CONFIG/$DOMAIN
 
-wget https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/virtual_host.template
+wget --quiet --continue https://raw.githubusercontent.com/that0n3guy/smartos-zone-java-ssl/master/virtual_host.template
 cp virtual_host.template $CONFIG
 rm virtual_host.template
 
