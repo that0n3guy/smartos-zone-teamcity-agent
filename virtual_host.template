@@ -7,7 +7,7 @@ server {
 
     root ROOT;
 
-    index index.html index.htm index.php index-test.php;
+    index index.html index.htm index.php;
 
     charset utf-8;
     
